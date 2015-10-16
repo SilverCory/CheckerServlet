@@ -178,10 +178,10 @@ public class CheckerServletConfig
 
 		if ( version < 2 ) {
 			Logger.getRootLogger().log( Level.FATAL, "Oudated config, dataconfig is not configured!" );
-			set( "settings.data.configLocation", "conf/spring.xml" );
+			set( "settings.data.configLocation", "conf/checker-spring.xml" );
 		}
 
-		configFile = getFile( "settings.data.configLocation", "conf/spring.xml" );
+		configFile = getFile( "settings.data.configLocation", "conf/checker-spring.xml" );
 
 		if ( !configFile.exists() ) {
 			try {
