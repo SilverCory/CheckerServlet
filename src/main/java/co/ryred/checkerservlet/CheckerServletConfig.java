@@ -24,7 +24,7 @@ public class CheckerServletConfig
 {
 
 
-	private static final File CONFIG_FILE = new File( new File( System.getProperty( "catalina.base" ), "conf" ), "PlayerServlet.yml" );
+	private static final File CONFIG_FILE = new File( new File( System.getProperty( "catalina.base" ), "conf" ), "CheckServlet.yml" );
 	private static final String HEADER = "YAML only please!";
 	public static YamlConfiguration config;
 	public static boolean debug;
