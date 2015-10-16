@@ -58,6 +58,13 @@ public class CheckerServlet extends HttpServlet
 		}, "CooldownPrune" ).start();
 
 		this.context = new FileSystemXmlApplicationContext( CheckerServletConfig.configFile.getPath() );
+		
+		try {
+
+			IServerBean sb = (IServerBean) this.context.getBean( "serverBean" ).insertServer( new Server( 0, 0, 0, "127.0.0.1", 25565 ); );
+
+		} catch ( Exception e ) {
+		}
 
 	}
 
