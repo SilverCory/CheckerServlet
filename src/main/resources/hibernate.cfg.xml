@@ -13,5 +13,18 @@
 
         <!-- DB schema will be updated if needed -->
         <property name="hbm2ddl.auto">update</property>
+
+        <event type="save">
+            <listener class="co.ryred.checkerservlet.servers.hibernate.SaveListener"/>
+        </event>
+
+        <event type="save-update">
+            <listener class="co.ryred.checkerservlet.servers.hibernate.SaveListener"/>
+        </event>
+
+        <event type="update">
+            <listener class="co.ryred.checkerservlet.servers.hibernate.SaveListener"/>
+        </event>
+
     </session-factory>
 </hibernate-configuration>

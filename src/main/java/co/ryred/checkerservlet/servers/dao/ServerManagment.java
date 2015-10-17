@@ -2,12 +2,17 @@ package co.ryred.checkerservlet.servers.dao;
 
 import co.ryred.checkerservlet.servers.Server;
 import co.ryred.checkerservlet.servers.dao.impl.IServerManagment;
+import co.ryred.checkerservlet.servers.hibernate.SaveListener;
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Projections;
+import org.hibernate.event.service.spi.EventListenerRegistry;
+import org.hibernate.event.spi.EventType;
+import org.hibernate.internal.SessionFactoryImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.util.List;
 
 /**
@@ -20,6 +25,8 @@ public class ServerManagment implements IServerManagment
 
 	@Autowired
 	private SessionFactory sessionFactory;
+
+	private SaveListener saveListener = new SaveListener();
 
 	public void insertServer( Server user )
 	{
@@ -62,6 +69,14 @@ public class ServerManagment implements IServerManagment
 	public void insertOrUpdate( Server server )
 	{
 		sessionFactory.getCurrentSession().saveOrUpdate( server );
+	}
+
+	@PostConstruct
+	public void registerListeners() {
+		final EventListenerRegistry registry = ((SessionFactoryImpl) sessionFactory).getServiceRegistry().getService(EventListenerRegistry.class);
+		registry.getEventListenerGroup( EventType.SAVE ).appendListener( saveListener );
+		registry.getEventListenerGroup( EventType.SAVE_UPDATE ).appendListener( saveListener );
+		registry.getEventListenerGroup( EventType.UPDATE ).appendListener( saveListener );
 	}
 
 }
