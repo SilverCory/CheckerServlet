@@ -8,9 +8,7 @@ import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Projections;
 import org.hibernate.event.service.spi.EventListenerRegistry;
-import org.hibernate.event.spi.EventType;
-import org.hibernate.event.spi.PersistEvent;
-import org.hibernate.event.spi.PersistEventListener;
+import org.hibernate.event.spi.*;
 import org.hibernate.internal.SessionFactoryImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -82,6 +80,16 @@ public class ServerManagment implements IServerManagment
 		//registry.getEventListenerGroup( EventType.SAVE ).appendListener( saveListener );
 		//registry.getEventListenerGroup( EventType.SAVE_UPDATE ).appendListener( saveListener );
 		//registry.getEventListenerGroup( EventType.UPDATE ).appendListener( saveListener );
+		registry.getEventListenerGroup( EventType.PRE_LOAD ).appendListener( new PreLoadEventListener() {
+			@Override
+			public void onPreLoad( PreLoadEvent event )
+			{
+				if (event.getEntity() instanceof Server) {
+					Server server = (Server) event.getEntity();
+					server.updateTimeStamps();
+				}
+			}
+		} );
 
 		registry.getEventListenerGroup( EventType.PERSIST ).appendListener( new PersistEventListener() {
 
