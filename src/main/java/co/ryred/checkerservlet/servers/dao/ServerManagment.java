@@ -37,6 +37,7 @@ public class ServerManagment implements IServerManagment
 
 	public void insertServer( Server user, boolean force )
 	{
+		user.updateTimeStamps();
 		if ( !exists( user ) && !force ) { sessionFactory.getCurrentSession().save( user ); }
 	}
 
@@ -70,6 +71,7 @@ public class ServerManagment implements IServerManagment
 	@Override
 	public void insertOrUpdate( Server server )
 	{
+		server.updateTimeStamps();
 		sessionFactory.getCurrentSession().saveOrUpdate( server );
 	}
 
@@ -80,14 +82,10 @@ public class ServerManagment implements IServerManagment
 		//registry.getEventListenerGroup( EventType.SAVE ).appendListener( saveListener );
 		//registry.getEventListenerGroup( EventType.SAVE_UPDATE ).appendListener( saveListener );
 		//registry.getEventListenerGroup( EventType.UPDATE ).appendListener( saveListener );
-		registry.getEventListenerGroup( EventType.PRE_LOAD ).appendListener( new PreLoadEventListener() {
-			@Override
-			public void onPreLoad( PreLoadEvent event )
-			{
-				if (event.getEntity() instanceof Server) {
-					Server server = (Server) event.getEntity();
-					server.updateTimeStamps();
-				}
+		registry.getEventListenerGroup( EventType.PRE_LOAD ).appendListener( event -> {
+			if (event.getEntity() instanceof Server) {
+				Server server = (Server) event.getEntity();
+				server.updateTimeStamps();
 			}
 		} );
 
