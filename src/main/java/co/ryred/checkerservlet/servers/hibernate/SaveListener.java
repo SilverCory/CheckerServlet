@@ -2,7 +2,6 @@ package co.ryred.checkerservlet.servers.hibernate;
 
 import co.ryred.checkerservlet.servers.Server;
 import org.hibernate.event.internal.DefaultSaveEventListener;
-import org.hibernate.event.internal.DefaultSaveOrUpdateEventListener;
 import org.hibernate.event.spi.SaveOrUpdateEvent;
 
 /**

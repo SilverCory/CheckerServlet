@@ -4,16 +4,20 @@ import co.ryred.checkerservlet.servers.Server;
 import co.ryred.checkerservlet.servers.dao.impl.IServerManagment;
 import co.ryred.checkerservlet.servers.hibernate.SaveListener;
 import org.hibernate.Criteria;
+import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Projections;
 import org.hibernate.event.service.spi.EventListenerRegistry;
 import org.hibernate.event.spi.EventType;
+import org.hibernate.event.spi.PersistEvent;
+import org.hibernate.event.spi.PersistEventListener;
 import org.hibernate.internal.SessionFactoryImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Cory Redmond
@@ -74,9 +78,33 @@ public class ServerManagment implements IServerManagment
 	@PostConstruct
 	public void registerListeners() {
 		final EventListenerRegistry registry = ((SessionFactoryImpl) sessionFactory).getServiceRegistry().getService(EventListenerRegistry.class);
-		registry.getEventListenerGroup( EventType.SAVE ).appendListener( saveListener );
-		registry.getEventListenerGroup( EventType.SAVE_UPDATE ).appendListener( saveListener );
-		registry.getEventListenerGroup( EventType.UPDATE ).appendListener( saveListener );
+
+		//registry.getEventListenerGroup( EventType.SAVE ).appendListener( saveListener );
+		//registry.getEventListenerGroup( EventType.SAVE_UPDATE ).appendListener( saveListener );
+		//registry.getEventListenerGroup( EventType.UPDATE ).appendListener( saveListener );
+
+		registry.getEventListenerGroup( EventType.PERSIST ).appendListener( new PersistEventListener() {
+
+			@Override
+			public void onPersist( PersistEvent event ) throws HibernateException
+			{
+				if (event.getObject() instanceof Server) {
+					Server server = (Server) event.getObject();
+					server.updateTimeStamps();
+				}
+			}
+
+			@Override
+			public void onPersist( PersistEvent event, Map map ) throws HibernateException
+			{
+				if (event.getObject() instanceof Server) {
+					Server server = (Server) event.getObject();
+					server.updateTimeStamps();
+				}
+			}
+
+		});
+
 	}
 
 }
