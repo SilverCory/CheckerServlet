@@ -126,6 +126,8 @@ public class CheckerServlet extends HttpServlet
 
 		} catch ( Exception e ) {
 
+			if( CheckerServletConfig.debug ) e.printStackTrace();
+
 			response.getOutputStream().print( "{\"error\": \"Something went wrong.\"}" );
 			return;
 
