@@ -2,10 +2,11 @@ package co.ryred.checkerservlet.servers;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import org.apache.commons.io.Charsets;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.UUID;
 
 /**
  * @author Cory Redmond
@@ -14,9 +15,23 @@ import java.util.Date;
 @Entity
 @Table(name = "Servers")
 @AllArgsConstructor
-@RequiredArgsConstructor
 public class Server
 {
+
+	public Server( int userID, int resourceID, long nonce, String serverAddress, int port )
+	{
+		this.uuid = UUID.nameUUIDFromBytes( ("SexyCory" + userID + "_" + resourceID + "_" + nonce + "_" + serverAddress + "_" + port).getBytes( Charsets.UTF_8 ) ).toString();
+		this.userID = userID;
+		this.resourceID = resourceID;
+		this.nonce = nonce;
+		this.serverAddress = serverAddress;
+		this.port = port;
+	}
+
+	@Column(unique = false, name = "uuid", nullable = false, updatable = false, columnDefinition = "VARCHAR(36) CHARACTER SET utf8 COLLATE utf8_bin")
+	@Getter
+	@Id
+	private final String uuid;
 
 	@Column(unique = false, name = "userID", nullable = false, updatable = false)
 	@Getter
@@ -26,12 +41,11 @@ public class Server
 	@Getter
 	private final int resourceID;
 
-	@Column(unique = true, name = "nonce", nullable = false, updatable = false)
+	@Column(unique = false, name = "nonce", nullable = false, updatable = false)
 	@Getter
-	@Id
 	private final long nonce;
 
-	@Column(unique = false, name = "serverAddress", nullable = false, updatable = false, columnDefinition = "VARCHAR(36) CHARACTER SET utf8 COLLATE utf8_bin")
+	@Column(unique = false, name = "serverAddress", nullable = false, updatable = false, columnDefinition = "VARCHAR(64) CHARACTER SET utf8 COLLATE utf8_bin")
 	@Getter
 	private final String serverAddress;
 
@@ -52,7 +66,7 @@ public class Server
 	public void updateTimeStamps() {
 		lastUpdated = new Date();
 		if ( firstNoticed == null ) {
-			 firstNoticed = new Date();
+			firstNoticed = new Date();
 		}
 	}
 
