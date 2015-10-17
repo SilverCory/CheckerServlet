@@ -64,6 +64,7 @@ public class CheckerServlet extends HttpServlet
 			 ((IServerBean) this.context.getBean( "serverBean" )).insertServer( new Server( 0, 0, 0, "127.0.0.1", 25565 ), true );
 
 		} catch ( Exception e ) {
+			e.printStackTrace();
 		}
 
 	}
