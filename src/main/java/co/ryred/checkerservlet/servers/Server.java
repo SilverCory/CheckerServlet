@@ -61,9 +61,14 @@ public class Server
 	@Getter
 	private Date firstNoticed;
 
+	@Column(unique = false, name = "totalCons", nullable = false, updatable = true)
+	@Getter
+	private int totalConnections;
+
 	@PreUpdate
 	@PrePersist
 	public void updateTimeStamps() {
+		totalConnections = totalConnections + 1;
 		lastUpdated = new Date();
 		if ( firstNoticed == null ) {
 			firstNoticed = new Date();
