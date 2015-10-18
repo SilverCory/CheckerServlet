@@ -77,6 +77,8 @@ public class ServerManagment implements IServerManagment
 
 	@PostConstruct
 	public void registerListeners() {
+
+		// this is pointless.
 		final EventListenerRegistry registry = ((SessionFactoryImpl) sessionFactory).getServiceRegistry().getService(EventListenerRegistry.class);
 
 		//registry.getEventListenerGroup( EventType.SAVE ).appendListener( saveListener );
