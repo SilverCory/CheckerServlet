@@ -63,7 +63,7 @@ public class Server
 
 	@Column(unique = false, name = "totalCons", nullable = false, updatable = true)
 	@Getter
-	private int totalConnections;
+	private int totalConnections = 0;
 
 	@PreUpdate
 	@PrePersist
