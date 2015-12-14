@@ -117,7 +117,7 @@ public class CheckerServlet extends HttpServlet
 			if( uid == 0 || rid == 0 || nonce == 0 ) {
 
 				//TODO better alerts.
-				Logger.getRootLogger().log( Level.FATAL, "Bad request from IP: " + request.getRemoteAddr() );
+				Logger.getRootLogger().log( Level.FATAL, "Bad request from IP: " + ipAddress );
 				throw new Exception( "Badness. Bad request/bad program?" );
 
 			}
