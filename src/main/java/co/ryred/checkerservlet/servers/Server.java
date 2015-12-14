@@ -2,6 +2,7 @@ package co.ryred.checkerservlet.servers;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.apache.commons.io.Charsets;
 
 import javax.persistence.*;
@@ -15,6 +16,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "Servers")
 @AllArgsConstructor
+@NoArgsConstructor
 public class Server
 {
 
@@ -31,27 +33,27 @@ public class Server
 	@Column(unique = true, name = "uuid", nullable = false, updatable = false, columnDefinition = "VARCHAR(36) CHARACTER SET utf8 COLLATE utf8_bin")
 	@Getter
 	@Id
-	private final String uuid;
+	private String uuid;
 
 	@Column(unique = false, name = "userID", nullable = false, updatable = false)
 	@Getter
-	private final int userID;
+	private int userID;
 
 	@Column(unique = false, name = "resourceID", nullable = false, updatable = false)
 	@Getter
-	private final int resourceID;
+	private int resourceID;
 
 	@Column(unique = false, name = "nonce", nullable = false, updatable = false)
 	@Getter
-	private final long nonce;
+	private long nonce;
 
 	@Column(unique = false, name = "serverAddress", nullable = false, updatable = false, columnDefinition = "VARCHAR(64) CHARACTER SET utf8 COLLATE utf8_bin")
 	@Getter
-	private final String serverAddress;
+	private String serverAddress;
 
 	@Column(unique = false, name = "port", nullable = false, updatable = false)
 	@Getter
-	private final int port;
+	private int port;
 
 	@Column(unique = false, name = "lastUpdated", nullable = false, updatable = true)
 	@Getter
