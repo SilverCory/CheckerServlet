@@ -67,6 +67,7 @@ public class ServerManagment implements IServerManagment
 	@Override
 	public void insertOrUpdate( Server server )
 	{
+		server.updateTimeStamps();
 		sessionFactory.getCurrentSession().saveOrUpdate( server );
 	}
 

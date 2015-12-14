@@ -26,7 +26,7 @@ public class CooldownUtil
 
 	public void cooldown( String loc )
 	{
-		long cooldowntime = 5000;
+		long cooldowntime = 60000;
 		cooldownMap.put( loc, System.currentTimeMillis() + cooldowntime );
 	}
 

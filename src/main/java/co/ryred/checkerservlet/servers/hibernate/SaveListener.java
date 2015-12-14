@@ -15,6 +15,8 @@ public class SaveListener extends DefaultSaveEventListener
 	public void onSaveOrUpdate( SaveOrUpdateEvent event )
 	{
 
+		System.out.println(" OMG THIS ACTUALLY DOES SOMETHING>!>!>!>! ");
+
 		if (event.getObject() instanceof Server) {
 			Server server = (Server) event.getObject();
 			server.updateTimeStamps();
