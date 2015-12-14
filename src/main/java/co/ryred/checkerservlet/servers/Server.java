@@ -67,9 +67,15 @@ public class Server
 	@Getter
 	private int totalConnections = 0;
 
+	private boolean kek = false;
+
 	@PreUpdate
 	@PrePersist
 	public void updateTimeStamps() {
+
+		if( kek ) return;
+		kek = true;
+
 		totalConnections = totalConnections + 1;
 		lastUpdated = new Date();
 		if ( firstNoticed == null ) {
