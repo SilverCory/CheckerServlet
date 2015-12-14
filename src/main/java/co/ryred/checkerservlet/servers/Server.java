@@ -67,6 +67,7 @@ public class Server
 	@Getter
 	private int totalConnections = 0;
 
+	@Transient
 	private boolean kek = false;
 
 	@PreUpdate
