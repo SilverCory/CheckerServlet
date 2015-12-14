@@ -34,7 +34,6 @@ public class ServerManagment implements IServerManagment
 
 	public void insertServer( Server user, boolean force )
 	{
-		user.updateTimeStamps();
 		if ( !exists( user ) && !force ) { sessionFactory.getCurrentSession().save( user ); }
 	}
 
@@ -68,7 +67,6 @@ public class ServerManagment implements IServerManagment
 	@Override
 	public void insertOrUpdate( Server server )
 	{
-		server.updateTimeStamps();
 		sessionFactory.getCurrentSession().saveOrUpdate( server );
 	}
 
