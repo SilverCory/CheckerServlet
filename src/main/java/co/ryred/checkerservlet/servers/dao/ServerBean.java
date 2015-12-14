@@ -34,9 +34,9 @@ public class ServerBean implements IServerBean
 	}
 
 	@Transactional
-	public Server getServer( long nonce )
+	public Server getServer( String uuidString )
 	{
-		return userManager.getServer( nonce );
+		return userManager.getServer( uuidString );
 	}
 
 	@Transactional

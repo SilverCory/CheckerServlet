@@ -15,7 +15,7 @@ public interface IServerManagment
 
 	void insertServer( Server user, boolean force );
 
-	Server getServer( long nonce );
+	Server getServer( String uuidString );
 
 	List<Server> getServers();
 

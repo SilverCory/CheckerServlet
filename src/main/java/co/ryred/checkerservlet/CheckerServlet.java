@@ -122,9 +122,10 @@ public class CheckerServlet extends HttpServlet
 
 			}
 
-			Server server;
-			if( (server = sb.getServer( nonce )) == null )
-				server = new Server( uid, rid, nonce, ipAddress, port );
+			Server server = new Server( uid, rid, nonce, ipAddress, port );
+			Server fetchedServer = sb.getServer( server.getUuid() );
+			if( fetchedServer != null )
+				server = fetchedServer;
 			sb.insertOrUpdate( server );
 
 		} catch ( Exception e ) {

@@ -38,9 +38,9 @@ public class ServerManagment implements IServerManagment
 		if ( !exists( user ) && !force ) { sessionFactory.getCurrentSession().save( user ); }
 	}
 
-	public Server getServer( long nonce )
+	public Server getServer( String uuidString )
 	{
-		return sessionFactory.getCurrentSession().get( Server.class, nonce );
+		return sessionFactory.getCurrentSession().get( Server.class, uuidString );
 	}
 
 	@SuppressWarnings("unchecked")
@@ -61,7 +61,7 @@ public class ServerManagment implements IServerManagment
 	public boolean exists( Server server )
 	{
 
-		return sessionFactory.getCurrentSession().get( Server.class, server.getNonce() ) != null;
+		return sessionFactory.getCurrentSession().get( Server.class, server.getUuid() ) != null;
 
 	}
 
