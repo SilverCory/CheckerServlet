@@ -93,7 +93,7 @@ public class CheckerServlet extends HttpServlet
 
 		response.setContentType( "application/json" );
 
-		String ipAddress = request.getHeader("X-FORWARDED-FOR");
+		String ipAddress = request.getHeader("X-Real-IP");
 		if (ipAddress == null) {
 			ipAddress = request.getRemoteAddr();
 		}
