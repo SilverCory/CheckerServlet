@@ -2,7 +2,6 @@ package co.ryred.checkerservlet.servers.dao;
 
 import co.ryred.checkerservlet.servers.Server;
 import co.ryred.checkerservlet.servers.dao.impl.IServerManagment;
-import co.ryred.checkerservlet.servers.hibernate.SaveListener;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
@@ -27,8 +26,6 @@ public class ServerManagment implements IServerManagment
 
 	@Autowired
 	private SessionFactory sessionFactory;
-
-	private SaveListener saveListener = new SaveListener();
 
 	public void insertServer( Server user )
 	{
@@ -75,7 +72,7 @@ public class ServerManagment implements IServerManagment
 		sessionFactory.getCurrentSession().saveOrUpdate( server );
 	}
 
-	@PostConstruct
+	/*@PostConstruct
 	public void registerListeners() {
 
 		// this is pointless.
@@ -113,6 +110,6 @@ public class ServerManagment implements IServerManagment
 
 		});
 
-	}
+	}*/
 
 }

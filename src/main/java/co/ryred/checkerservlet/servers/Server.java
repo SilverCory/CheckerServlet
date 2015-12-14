@@ -72,7 +72,11 @@ public class Server
 		lastUpdated = new Date();
 		if ( firstNoticed == null ) {
 			firstNoticed = new Date();
+			totalConnections = 1;
+		} else {
+			totalConnections++;
 		}
+
 	}
 
 }
