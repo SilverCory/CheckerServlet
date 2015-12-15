@@ -28,6 +28,7 @@ public class CheckerServletConfig
 	private static final String HEADER = "YAML only please!";
 	public static YamlConfiguration config;
 	public static boolean debug;
+	public static String ips_url;
 	public static File configFile;
 	static int version;
 	private static boolean initted = false;
@@ -61,8 +62,8 @@ public class CheckerServletConfig
 		config.options().header( HEADER );
 		config.options().copyDefaults( true );
 
-		version = getInt( "config-version", 3 );
-		set( "config-version", 3 );
+		version = getInt( "config-version", 4 );
+		set( "config-version", 4 );
 		readConfig( CheckerServletConfig.class, null );
 
 		Logger.getRootLogger().log( Level.INFO, "Configuration summary!" );
@@ -171,6 +172,17 @@ public class CheckerServletConfig
 	private static void debug()
 	{
 		debug = getBoolean( "settings.debug", false );
+	}
+
+	private static void urls()
+	{
+
+		if( version < 4 ) {
+			Logger.getRootLogger().log( Level.FATAL, "Oudated config, urls are not configured!" );
+			set( "settings.known_ips_json", "http://somewhere.someplace/myjson.json" );
+		}
+
+		ips_url = getString( "settings.known_ips_json", "http://somewhere.someplace/myjson.json" );
 	}
 
 	private static void dataSettings()

@@ -5,6 +5,7 @@ import co.ryred.checkerservlet.servers.dao.impl.IServerBean;
 import co.ryred.checkerservlet.util.CooldownUtil;
 import co.ryred.checkerservlet.util.Parsing;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.BeanFactory;
@@ -15,6 +16,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -25,8 +30,11 @@ import java.util.concurrent.TimeUnit;
 public class CheckerServlet extends HttpServlet
 {
 
-	private static final Gson full_gson = new Gson();
+	public static final Gson full_gson = new Gson();
 	private final BeanFactory context;
+
+	private static int mintick = 0;
+	private static ArrayList<String> knownIps = new ArrayList<>();
 
 	public CheckerServlet() throws Exception
 	{
@@ -37,25 +45,33 @@ public class CheckerServlet extends HttpServlet
 		cfg.addAnnotatedClass( User.class );
 		cfg.configure( PlayerServletConfig.configFile );
 		this.sessionFactory = cfg.buildSessionFactory();*/
-		new Thread( new Runnable() {
-			@Override
-			public void run()
-			{
 
-				while ( true ) {
+		new Thread(() -> {
 
-					try {
-						Thread.sleep( TimeUnit.MINUTES.toMillis( 5 ) );
-					} catch ( Exception e ) {}
+            while ( true ) {
 
+                try {
+                    Thread.sleep( TimeUnit.MINUTES.toMillis( 1 ) );
+                } catch ( Exception e ) {}
+
+				if( mintick % 5 == 0 ) {
 					try {
 						CooldownUtil.getCooldown().prune();
-					} catch ( Exception e ) {}
-
+					} catch (Exception e) {
+					}
 				}
 
-			}
-		}, "CooldownPrune" ).start();
+				if( mintick % 20 == 0 ) {
+					try {
+						URL url = new URL( CheckerServletConfig.ips_url );
+						knownIps = full_gson.fromJson(new InputStreamReader(url.openStream()), new TypeToken<ArrayList<String>>() {
+						}.getType());
+					} catch (Exception ex) {}
+				}
+
+            }
+
+        }, "CooldownPrune" ).start();
 
 		this.context = new FileSystemXmlApplicationContext( CheckerServletConfig.configFile.getPath() );
 		
@@ -96,6 +112,11 @@ public class CheckerServlet extends HttpServlet
 		String ipAddress = request.getHeader("X-Real-IP");
 		if (ipAddress == null) {
 			ipAddress = request.getRemoteAddr();
+		}
+
+		if( knownIps.contains( ipAddress ) ) {
+			response.getOutputStream().print( "{\"success\": \"Done.\"}" );
+			return;
 		}
 
 		if( CooldownUtil.getCooldown().isCooldown( ipAddress ) ) {
