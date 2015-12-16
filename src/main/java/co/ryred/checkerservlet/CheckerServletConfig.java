@@ -15,6 +15,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * @author Cory Redmond
@@ -29,6 +30,7 @@ public class CheckerServletConfig
 	public static YamlConfiguration config;
 	public static boolean debug;
 	public static String ips_url;
+	public static String password;
 	public static File configFile;
 	static int version;
 	private static boolean initted = false;
@@ -62,8 +64,8 @@ public class CheckerServletConfig
 		config.options().header( HEADER );
 		config.options().copyDefaults( true );
 
-		version = getInt( "config-version", 4 );
-		set( "config-version", 4 );
+		version = getInt( "config-version", 5 );
+		set( "config-version", 5 );
 		readConfig( CheckerServletConfig.class, null );
 
 		Logger.getRootLogger().log( Level.INFO, "Configuration summary!" );
@@ -183,6 +185,17 @@ public class CheckerServletConfig
 		}
 
 		ips_url = getString( "settings.known_ips_json", "http://somewhere.someplace/myjson.json" );
+	}
+
+	private static void security()
+	{
+
+		if( version < 5 ) {
+			Logger.getRootLogger().log( Level.FATAL, "Oudated config, security is not configured!" );
+			set( "settings.password", UUID.randomUUID().toString().replace("-", "") );
+		}
+
+		password = getString( "settings.password", UUID.randomUUID().toString().replace("-", "") );
 	}
 
 	private static void dataSettings()

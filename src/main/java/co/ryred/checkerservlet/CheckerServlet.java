@@ -1,5 +1,11 @@
 package co.ryred.checkerservlet;
 
+import be.maximvdw.spigotsite.SpigotSiteCore;
+import be.maximvdw.spigotsite.api.SpigotSite;
+import be.maximvdw.spigotsite.api.resource.Resource;
+import be.maximvdw.spigotsite.api.user.User;
+import co.ryred.checkerservlet.Spigot.ID;
+import co.ryred.checkerservlet.Spigot.NameResponse;
 import co.ryred.checkerservlet.servers.Server;
 import co.ryred.checkerservlet.servers.dao.impl.IServerBean;
 import co.ryred.checkerservlet.util.CooldownUtil;
@@ -19,7 +25,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -40,6 +45,8 @@ public class CheckerServlet extends HttpServlet
 	{
 
 		CheckerServletConfig.init();
+
+		new SpigotSiteCore();
 
 		/*Configuration cfg = new Configuration();
 		cfg.addAnnotatedClass( User.class );
@@ -103,6 +110,91 @@ public class CheckerServlet extends HttpServlet
 		resp.sendRedirect( "https://ryred.co/" );
 	}
 
+	@Override
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+		String[] requestArr = request.getRequestURI().substring( 1 ).replace( "/", "\u5584" ).split( "\u5584" );
+		String command = "";
+
+		if ( requestArr.length >= 1 ) { command = requestArr[ 0 ]; }
+
+		if( !CheckerServletConfig.password.equals(request.getParameter("pw") ) ) {
+			response.setStatus(401);
+			response.getOutputStream().print( "{\"error\": \"Unauthorised!\"}" );
+			return;
+		}
+
+		if(!request.getContentType().toLowerCase().contains( "json" )) {
+			response.setStatus(415);
+			response.getOutputStream().print( "{\"error\": \"Request not json content type!\"}" );
+			return;
+		}
+
+
+		ArrayList<ID> ids = new ArrayList<>();
+		try {
+
+			ArrayList< String > receivedIds = full_gson.fromJson(new InputStreamReader(request.getInputStream()), new TypeToken<ArrayList<String>>() {}.getType());
+
+			for( String string : receivedIds ) {
+
+				try {
+					ids.add(new ID(string, Integer.parseInt(string), false));
+				} catch (NumberFormatException ex) {
+					ids.add(new ID(string, -1, true));
+				}
+
+			}
+
+		} catch ( Exception ex ) {
+			response.setStatus(520);
+			response.getOutputStream().print("{\"error\": \"Request not json content type or invalid format!\"}");
+			return;
+		}
+
+		ArrayList<NameResponse> responses = new ArrayList<>();
+		if( command.equalsIgnoreCase("user") ) {
+
+			for( ID id : ids ) {
+				if(!id.isError()) {
+
+					try {
+						User user = SpigotSite.getAPI().getUserManager().getUserById( id.getId() );
+						responses.add( new NameResponse( id, user.getUsername() ) );
+					} catch ( Exception ex ) {
+						id.setError(true);
+						responses.add( new NameResponse( id, null ) );
+					}
+
+				} else {
+					responses.add( new NameResponse( id, null ) );
+				}
+			}
+
+		} else if( command.equalsIgnoreCase( "resource" ) ) {
+
+			for( ID id : ids ) {
+				if(!id.isError()) {
+
+					try {
+						Resource resource = SpigotSite.getAPI().getResourceManager().getResourceById( id.getId() );
+						responses.add( new NameResponse( id, resource.getResourceName() ) );
+					} catch ( Exception ex ) {
+						id.setError(true);
+						responses.add( new NameResponse( id, null ) );
+					}
+
+				} else {
+					responses.add( new NameResponse( id, null ) );
+				}
+			}
+
+		}
+
+		response.getOutputStream().print( full_gson.toJson( responses ) );
+
+	}
+
 	protected void doGet( HttpServletRequest request, HttpServletResponse response )
 			throws ServletException, IOException
 	{
@@ -159,7 +251,6 @@ public class CheckerServlet extends HttpServlet
 		}
 
 		response.getOutputStream().print( "{\"success\": \"Done.\"}" );
-
 
 	}
 
