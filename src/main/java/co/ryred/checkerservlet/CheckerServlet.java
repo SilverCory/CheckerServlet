@@ -46,7 +46,9 @@ public class CheckerServlet extends HttpServlet
 
 		CheckerServletConfig.init();
 
-		new SpigotSiteCore();
+		try {
+			new SpigotSiteCore();
+		}catch (Exception ex) {}
 
 		/*Configuration cfg = new Configuration();
 		cfg.addAnnotatedClass( User.class );
