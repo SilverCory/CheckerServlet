@@ -20,7 +20,7 @@ public class ResponseCache {
 	private long expireTime;
 
 	public boolean isExpired() {
-		return ( expireTime + CheckerServletConfig.cacheTime ) - System.currentTimeMillis() > 0;
+		return ( expireTime + CheckerServletConfig.cacheTime ) - System.currentTimeMillis() < 0;
 	}
 
 }
