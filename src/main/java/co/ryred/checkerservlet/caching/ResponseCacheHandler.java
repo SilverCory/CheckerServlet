@@ -38,8 +38,8 @@ public class ResponseCacheHandler {
 		File file = getFile( resp.getId().getId(), resource );
 		if ( file.exists() ) file.delete();
 
-		try {
-			CheckerServlet.full_gson.toJson( respCache, new FileWriter( file ) );
+		try ( FileWriter fw = new FileWriter( file ) ) {
+			CheckerServlet.full_gson.toJson( respCache, fw );
 		} catch ( Exception ex ) {
 		}
 
