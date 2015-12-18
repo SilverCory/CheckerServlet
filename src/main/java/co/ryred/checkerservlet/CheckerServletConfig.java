@@ -16,6 +16,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Cory Redmond
@@ -32,6 +33,8 @@ public class CheckerServletConfig
 	public static String ips_url;
 	public static String password;
 	public static File configFile;
+	public static File cacheDir;
+	public static long cacheTime;
 	static int version;
 	private static boolean initted = false;
 
@@ -64,8 +67,8 @@ public class CheckerServletConfig
 		config.options().header( HEADER );
 		config.options().copyDefaults( true );
 
-		version = getInt( "config-version", 5 );
-		set( "config-version", 5 );
+		version = getInt( "config-version", 6 );
+		set( "config-version", 6 );
 		readConfig( CheckerServletConfig.class, null );
 
 		Logger.getRootLogger().log( Level.INFO, "Configuration summary!" );
@@ -196,6 +199,20 @@ public class CheckerServletConfig
 		}
 
 		password = getString( "settings.password", UUID.randomUUID().toString().replace("-", "") );
+	}
+
+	private static void caching()
+	{
+
+		if( version < 6 ) {
+			Logger.getRootLogger().log( Level.FATAL, "Oudated config, caching is not configured!" );
+			set( "settings.cache.cachedir", "data/cache");
+			set( "settings.cache.expiretime", 10);
+		}
+
+		cacheDir = getFile( "settings.cache.cachedir", "data/cache");
+		cacheTime = TimeUnit.DAYS.toMillis( getLong( "settings.cache.expiretime", 10) );
+
 	}
 
 	private static void dataSettings()

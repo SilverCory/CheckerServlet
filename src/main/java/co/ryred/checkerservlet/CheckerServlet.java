@@ -4,6 +4,8 @@ import be.maximvdw.spigotsite.SpigotSiteCore;
 import be.maximvdw.spigotsite.api.SpigotSite;
 import be.maximvdw.spigotsite.api.resource.Resource;
 import be.maximvdw.spigotsite.api.user.User;
+import co.ryred.checkerservlet.caching.ResponseCache;
+import co.ryred.checkerservlet.caching.ResponseCacheHandler;
 import co.ryred.checkerservlet.spigot.ID;
 import co.ryred.checkerservlet.spigot.NameResponse;
 import co.ryred.checkerservlet.servers.Server;
@@ -161,8 +163,17 @@ public class CheckerServlet extends HttpServlet
 				if(!id.isError()) {
 
 					try {
-						User user = SpigotSite.getAPI().getUserManager().getUserById( id.getId() );
-						responses.add( new NameResponse( id, user.getUsername() ) );
+
+						NameResponse nr = ResponseCacheHandler.readCache( id.getId(), false );
+						if( nr != null ) {
+							responses.add( nr );
+						} else {
+							User user = SpigotSite.getAPI().getUserManager().getUserById( id.getId() );
+							nr = new NameResponse( id, user.getUsername() );
+							responses.add( nr );
+							ResponseCacheHandler.putCache( nr, false );
+						}
+
 					} catch ( Exception ex ) {
 						id.setError(true);
 						responses.add( new NameResponse( id, null ) );
@@ -179,8 +190,15 @@ public class CheckerServlet extends HttpServlet
 				if(!id.isError()) {
 
 					try {
-						Resource resource = SpigotSite.getAPI().getResourceManager().getResourceById( id.getId() );
-						responses.add( new NameResponse( id, resource.getResourceName() ) );
+						NameResponse nr = ResponseCacheHandler.readCache( id.getId(), true );
+						if( nr != null ) {
+							responses.add( nr );
+						} else {
+							Resource resource = SpigotSite.getAPI().getResourceManager().getResourceById( id.getId() );
+							nr = new NameResponse( id, resource.getResourceName() );
+							responses.add( nr );
+							ResponseCacheHandler.putCache( nr, true );
+						}
 					} catch ( Exception ex ) {
 						id.setError(true);
 						responses.add( new NameResponse( id, null ) );
