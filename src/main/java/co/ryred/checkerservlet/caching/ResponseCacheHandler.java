@@ -47,7 +47,9 @@ public class ResponseCacheHandler {
 
 	public static File getFile( int id, boolean resource ) {
 		String name = "resp_" + ( resource ? "res" : "usr" ) + "_" + id + ".json";
-		return new File( new File( CheckerServletConfig.cacheDir, "responses" ), name );
+		File file = new File( new File( CheckerServletConfig.cacheDir, "responses" ), name );
+		file.getParentFile().mkdirs();
+		return file;
 	}
 
 }
