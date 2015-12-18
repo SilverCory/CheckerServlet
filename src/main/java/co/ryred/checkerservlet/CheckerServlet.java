@@ -218,7 +218,9 @@ public class CheckerServlet extends HttpServlet {
 
 					} catch ( Exception ex ) {
 						id.setError( true );
-						responses.add( new NameResponse( id, null ) );
+						NameResponse nr = new NameResponse( id, null );
+						responses.add( nr );
+						ResponseCacheHandler.putCache( nr, false );
 					}
 
 				} else {
