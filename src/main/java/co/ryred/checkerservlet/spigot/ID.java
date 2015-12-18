@@ -12,8 +12,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ID {
 
-    private String originalString;
-    private int id;
-    private boolean error;
+	private String originalString;
+	private int id;
+	private boolean error;
 
 }

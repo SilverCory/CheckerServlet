@@ -7,8 +7,7 @@ import java.util.Set;
 /**
  * Represents a section of a {@link Configuration}
  */
-public interface ConfigurationSection
-{
+public interface ConfigurationSection {
 	/**
 	 * Gets a set containing all keys in this section.
 	 * <p>

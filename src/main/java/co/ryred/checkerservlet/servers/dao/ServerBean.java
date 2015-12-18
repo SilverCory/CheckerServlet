@@ -15,51 +15,43 @@ import java.util.List;
  */
 @Transactional
 @Component
-public class ServerBean implements IServerBean
-{
+public class ServerBean implements IServerBean {
 
 	@Autowired
 	private IServerManagment userManager;
 
 	@Transactional
-	public void insertServer( Server user )
-	{
+	public void insertServer( Server user ) {
 		userManager.insertServer( user );
 	}
 
 	@Override
-	public void insertServer( Server user, boolean force )
-	{
+	public void insertServer( Server user, boolean force ) {
 		userManager.insertServer( user, force );
 	}
 
 	@Transactional
-	public Server getServer( String uuidString )
-	{
+	public Server getServer( String uuidString ) {
 		return userManager.getServer( uuidString );
 	}
 
 	@Transactional
-	public List<Server> getServers()
-	{
+	public List<Server> getServers() {
 		return userManager.getServers();
 	}
 
 	@Override
-	public int getTotalServers()
-	{
+	public int getTotalServers() {
 		return userManager.getTotalServers();
 	}
 
 	@Override
-	public boolean exists( Server user )
-	{
+	public boolean exists( Server user ) {
 		return userManager.exists( user );
 	}
 
 	@Override
-	public void insertOrUpdate( Server server )
-	{
+	public void insertOrUpdate( Server server ) {
 		userManager.insertOrUpdate( server );
 	}
 

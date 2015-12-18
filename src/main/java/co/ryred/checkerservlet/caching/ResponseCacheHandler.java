@@ -19,11 +19,11 @@ public class ResponseCacheHandler {
 	public static NameResponse readCache( int id, boolean resource ) {
 
 		File file = getFile( id, resource );
-		if( !file.exists() ) return null;
+		if ( !file.exists() ) return null;
 
 		try {
 			ResponseCache resp = CheckerServlet.full_gson.fromJson( new FileReader( file ), ResponseCache.class );
-			if( !resp.isExpired() ) return resp.getResponse();
+			if ( !resp.isExpired() ) return resp.getResponse();
 		} catch ( FileNotFoundException e ) {
 		}
 
@@ -36,17 +36,18 @@ public class ResponseCacheHandler {
 		ResponseCache respCache = new ResponseCache( resp, System.currentTimeMillis() );
 
 		File file = getFile( resp.getId().getId(), resource );
-		if( file.exists() ) file.delete();
+		if ( file.exists() ) file.delete();
 
 		try {
 			CheckerServlet.full_gson.toJson( respCache, new FileWriter( file ) );
-		} catch ( Exception ex ) {}
+		} catch ( Exception ex ) {
+		}
 
 	}
 
 	public static File getFile( int id, boolean resource ) {
 		String name = "resp_" + ( resource ? "res" : "usr" ) + "_" + id + ".json";
-		return new File( new File( CheckerServletConfig.cacheDir, "responses" ), name);
+		return new File( new File( CheckerServletConfig.cacheDir, "responses" ), name );
 	}
 
 }

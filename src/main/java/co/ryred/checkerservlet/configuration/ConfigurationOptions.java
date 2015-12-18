@@ -4,14 +4,12 @@ package co.ryred.checkerservlet.configuration;
  * Various settings for controlling the input and output of a {@link
  * Configuration}
  */
-public class ConfigurationOptions
-{
+public class ConfigurationOptions {
 	private final Configuration configuration;
 	private char pathSeparator = '.';
 	private boolean copyDefaults = false;
 
-	protected ConfigurationOptions( Configuration configuration )
-	{
+	protected ConfigurationOptions( Configuration configuration ) {
 		this.configuration = configuration;
 	}
 
@@ -20,8 +18,7 @@ public class ConfigurationOptions
 	 *
 	 * @return Parent configuration
 	 */
-	public Configuration configuration()
-	{
+	public Configuration configuration() {
 		return configuration;
 	}
 
@@ -34,8 +31,7 @@ public class ConfigurationOptions
 	 *
 	 * @return Path separator
 	 */
-	public char pathSeparator()
-	{
+	public char pathSeparator() {
 		return pathSeparator;
 	}
 
@@ -49,8 +45,7 @@ public class ConfigurationOptions
 	 * @param value Path separator
 	 * @return This object, for chaining
 	 */
-	public ConfigurationOptions pathSeparator( char value )
-	{
+	public ConfigurationOptions pathSeparator( char value ) {
 		this.pathSeparator = value;
 		return this;
 	}
@@ -69,8 +64,7 @@ public class ConfigurationOptions
 	 *
 	 * @return Whether or not defaults are directly copied
 	 */
-	public boolean copyDefaults()
-	{
+	public boolean copyDefaults() {
 		return copyDefaults;
 	}
 
@@ -89,8 +83,7 @@ public class ConfigurationOptions
 	 * @param value Whether or not defaults are directly copied
 	 * @return This object, for chaining
 	 */
-	public ConfigurationOptions copyDefaults( boolean value )
-	{
+	public ConfigurationOptions copyDefaults( boolean value ) {
 		this.copyDefaults = value;
 		return this;
 	}

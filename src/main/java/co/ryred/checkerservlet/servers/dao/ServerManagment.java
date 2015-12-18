@@ -3,70 +3,58 @@ package co.ryred.checkerservlet.servers.dao;
 import co.ryred.checkerservlet.servers.Server;
 import co.ryred.checkerservlet.servers.dao.impl.IServerManagment;
 import org.hibernate.Criteria;
-import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Projections;
-import org.hibernate.event.service.spi.EventListenerRegistry;
-import org.hibernate.event.spi.*;
-import org.hibernate.internal.SessionFactoryImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author Cory Redmond
  *         Created by acech_000 on 18/09/2015.
  */
 @Service
-public class ServerManagment implements IServerManagment
-{
+public class ServerManagment implements IServerManagment {
 
 	@Autowired
 	private SessionFactory sessionFactory;
 
-	public void insertServer( Server user )
-	{
+	public void insertServer( Server user ) {
 		insertServer( user, true );
 	}
 
-	public void insertServer( Server user, boolean force )
-	{
-		if ( !exists( user ) && !force ) { sessionFactory.getCurrentSession().save( user ); }
+	public void insertServer( Server user, boolean force ) {
+		if ( !exists( user ) && !force ) {
+			sessionFactory.getCurrentSession().save( user );
+		}
 	}
 
-	public Server getServer( String uuidString )
-	{
+	public Server getServer( String uuidString ) {
 		return sessionFactory.getCurrentSession().get( Server.class, uuidString );
 	}
 
-	@SuppressWarnings("unchecked")
-	public List<Server> getServers()
-	{
+	@SuppressWarnings( "unchecked" )
+	public List<Server> getServers() {
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria( Server.class );
 		return criteria.list();
 	}
 
 	@Override
-	public int getTotalServers()
-	{
-		Number num = (Number) sessionFactory.getCurrentSession().createCriteria( Server.class ).setProjection( Projections.rowCount() ).uniqueResult();
+	public int getTotalServers() {
+		Number num = ( Number ) sessionFactory.getCurrentSession().createCriteria( Server.class ).setProjection( Projections.rowCount() ).uniqueResult();
 		return num.intValue();
 	}
 
 	@Override
-	public boolean exists( Server server )
-	{
+	public boolean exists( Server server ) {
 
 		return sessionFactory.getCurrentSession().get( Server.class, server.getUuid() ) != null;
 
 	}
 
 	@Override
-	public void insertOrUpdate( Server server )
-	{
+	public void insertOrUpdate( Server server ) {
 		server.updateTimeStamps();
 		sessionFactory.getCurrentSession().saveOrUpdate( server );
 	}

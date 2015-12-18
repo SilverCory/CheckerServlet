@@ -9,16 +9,14 @@ import java.util.Map;
  * from any source, and stores all values in memory only.
  * This is useful for temporary Configurations for providing defaults.
  */
-public class MemoryConfiguration extends MemorySection implements Configuration
-{
+public class MemoryConfiguration extends MemorySection implements Configuration {
 	protected Configuration defaults;
 	protected MemoryConfigurationOptions options;
 
 	/**
 	 * Creates an empty {@link co.ryred.checkerservlet.configuration.MemoryConfiguration} with no default values.
 	 */
-	public MemoryConfiguration()
-	{
+	public MemoryConfiguration() {
 	}
 
 	/**
@@ -28,25 +26,11 @@ public class MemoryConfiguration extends MemorySection implements Configuration
 	 * @param defaults Default value provider
 	 * @throws IllegalArgumentException Thrown if defaults is null
 	 */
-	public MemoryConfiguration( Configuration defaults )
-	{
+	public MemoryConfiguration( Configuration defaults ) {
 		this.defaults = defaults;
 	}
 
-	@Override
-	public void addDefault( String path, Object value )
-	{
-		Validate.notNull( path, "Path may not be null" );
-
-		if ( defaults == null ) {
-			defaults = new MemoryConfiguration();
-		}
-
-		defaults.set( path, value );
-	}
-
-	public void addDefaults( Map<String, Object> defaults )
-	{
+	public void addDefaults( Map<String, Object> defaults ) {
 		Validate.notNull( defaults, "Defaults may not be null" );
 
 		for ( Map.Entry<String, Object> entry : defaults.entrySet() ) {
@@ -54,37 +38,43 @@ public class MemoryConfiguration extends MemorySection implements Configuration
 		}
 	}
 
-	public void addDefaults( Configuration defaults )
-	{
+	public void addDefaults( Configuration defaults ) {
 		Validate.notNull( defaults, "Defaults may not be null" );
 
 		addDefaults( defaults.getValues( true ) );
 	}
 
-	public Configuration getDefaults()
-	{
+	public Configuration getDefaults() {
 		return defaults;
 	}
 
-	public void setDefaults( Configuration defaults )
-	{
+	public void setDefaults( Configuration defaults ) {
 		Validate.notNull( defaults, "Defaults may not be null" );
 
 		this.defaults = defaults;
 	}
 
-	@Override
-	public ConfigurationSection getParent()
-	{
-		return null;
-	}
-
-	public MemoryConfigurationOptions options()
-	{
+	public MemoryConfigurationOptions options() {
 		if ( options == null ) {
 			options = new MemoryConfigurationOptions( this );
 		}
 
 		return options;
+	}
+
+	@Override
+	public ConfigurationSection getParent() {
+		return null;
+	}
+
+	@Override
+	public void addDefault( String path, Object value ) {
+		Validate.notNull( path, "Path may not be null" );
+
+		if ( defaults == null ) {
+			defaults = new MemoryConfiguration();
+		}
+
+		defaults.set( path, value );
 	}
 }

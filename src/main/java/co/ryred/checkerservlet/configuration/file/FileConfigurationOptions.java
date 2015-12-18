@@ -7,33 +7,28 @@ import co.ryred.checkerservlet.configuration.MemoryConfigurationOptions;
  * Various settings for controlling the input and output of a {@link
  * FileConfiguration}
  */
-public class FileConfigurationOptions extends MemoryConfigurationOptions
-{
+public class FileConfigurationOptions extends MemoryConfigurationOptions {
 	private String header = null;
 	private boolean copyHeader = true;
 
-	protected FileConfigurationOptions( MemoryConfiguration configuration )
-	{
+	protected FileConfigurationOptions( MemoryConfiguration configuration ) {
 		super( configuration );
 	}
 
 	@Override
-	public FileConfiguration configuration()
-	{
-		return (FileConfiguration) super.configuration();
+	public FileConfiguration configuration() {
+		return ( FileConfiguration ) super.configuration();
 	}
 
 	@Override
-	public FileConfigurationOptions copyDefaults( boolean value )
-	{
-		super.copyDefaults( value );
+	public FileConfigurationOptions pathSeparator( char value ) {
+		super.pathSeparator( value );
 		return this;
 	}
 
 	@Override
-	public FileConfigurationOptions pathSeparator( char value )
-	{
-		super.pathSeparator( value );
+	public FileConfigurationOptions copyDefaults( boolean value ) {
+		super.copyDefaults( value );
 		return this;
 	}
 
@@ -51,8 +46,7 @@ public class FileConfigurationOptions extends MemoryConfigurationOptions
 	 *
 	 * @return Header
 	 */
-	public String header()
-	{
+	public String header() {
 		return header;
 	}
 
@@ -71,8 +65,7 @@ public class FileConfigurationOptions extends MemoryConfigurationOptions
 	 * @param value New header
 	 * @return This object, for chaining
 	 */
-	public FileConfigurationOptions header( String value )
-	{
+	public FileConfigurationOptions header( String value ) {
 		this.header = value;
 		return this;
 	}
@@ -93,8 +86,7 @@ public class FileConfigurationOptions extends MemoryConfigurationOptions
 	 *
 	 * @return Whether or not to copy the header
 	 */
-	public boolean copyHeader()
-	{
+	public boolean copyHeader() {
 		return copyHeader;
 	}
 
@@ -115,8 +107,7 @@ public class FileConfigurationOptions extends MemoryConfigurationOptions
 	 * @param value Whether or not to copy the header
 	 * @return This object, for chaining
 	 */
-	public FileConfigurationOptions copyHeader( boolean value )
-	{
+	public FileConfigurationOptions copyHeader( boolean value ) {
 		copyHeader = value;
 
 		return this;

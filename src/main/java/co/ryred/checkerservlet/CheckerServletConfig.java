@@ -22,8 +22,7 @@ import java.util.concurrent.TimeUnit;
  * @author Cory Redmond
  *         Created by acech_000 on 03/04/2015.
  */
-public class CheckerServletConfig
-{
+public class CheckerServletConfig {
 
 
 	private static final File CONFIG_FILE = new File( new File( System.getProperty( "catalina.base" ), "conf" ), "CheckServlet.yml" );
@@ -38,13 +37,11 @@ public class CheckerServletConfig
 	static int version;
 	private static boolean initted = false;
 
-	public static void init()
-	{
+	public static void init() {
 		init( false );
 	}
 
-	public static void init( boolean force )
-	{
+	public static void init( boolean force ) {
 		if ( !force && initted ) {
 			Logger.getRootLogger().log( Level.WARN, "Config was already init'd." );
 			return;
@@ -94,8 +91,7 @@ public class CheckerServletConfig
 
 	}
 
-	static void readConfig( Class<?> clazz, Object instance )
-	{
+	static void readConfig( Class<?> clazz, Object instance ) {
 		for ( Method method : clazz.getDeclaredMethods() ) {
 			if ( Modifier.isPrivate( method.getModifiers() ) ) {
 				if ( method.getParameterTypes().length == 0 && method.getReturnType() == Void.TYPE ) {
@@ -118,49 +114,41 @@ public class CheckerServletConfig
 		}
 	}
 
-	private static void set( String path, Object val )
-	{
+	private static void set( String path, Object val ) {
 		config.set( path, val );
 	}
 
-	private static long getLong( String path, long def )
-	{
+	private static long getLong( String path, long def ) {
 		config.addDefault( path, def );
 		return config.getLong( path, config.getLong( path ) );
 	}
 
-	private static boolean getBoolean( String path, boolean def )
-	{
+	private static boolean getBoolean( String path, boolean def ) {
 		config.addDefault( path, def );
 		return config.getBoolean( path, config.getBoolean( path ) );
 	}
 
-	private static int getInt( String path, int def )
-	{
+	private static int getInt( String path, int def ) {
 		config.addDefault( path, def );
 		return config.getInt( path, config.getInt( path ) );
 	}
 
-	private static <T> List getList( String path, T def )
-	{
+	private static <T> List getList( String path, T def ) {
 		config.addDefault( path, def );
 		return config.getList( path, config.getList( path ) );
 	}
 
-	private static String getString( String path, String def )
-	{
+	private static String getString( String path, String def ) {
 		config.addDefault( path, def );
 		return config.getString( path, config.getString( path ) );
 	}
 
-	private static double getDouble( String path, double def )
-	{
+	private static double getDouble( String path, double def ) {
 		config.addDefault( path, def );
 		return config.getDouble( path, config.getDouble( path ) );
 	}
 
-	private static File getFile( String path, String def )
-	{
+	private static File getFile( String path, String def ) {
 
 		String fileLoc = getString( path, def );
 
@@ -174,15 +162,13 @@ public class CheckerServletConfig
 
 	}
 
-	private static void debug()
-	{
+	private static void debug() {
 		debug = getBoolean( "settings.debug", false );
 	}
 
-	private static void urls()
-	{
+	private static void urls() {
 
-		if( version < 4 ) {
+		if ( version < 4 ) {
 			Logger.getRootLogger().log( Level.FATAL, "Oudated config, urls are not configured!" );
 			set( "settings.known_ips_json", "http://somewhere.someplace/myjson.json" );
 		}
@@ -190,33 +176,30 @@ public class CheckerServletConfig
 		ips_url = getString( "settings.known_ips_json", "http://somewhere.someplace/myjson.json" );
 	}
 
-	private static void security()
-	{
+	private static void security() {
 
-		if( version < 5 ) {
+		if ( version < 5 ) {
 			Logger.getRootLogger().log( Level.FATAL, "Oudated config, security is not configured!" );
-			set( "settings.password", UUID.randomUUID().toString().replace("-", "") );
+			set( "settings.password", UUID.randomUUID().toString().replace( "-", "" ) );
 		}
 
-		password = getString( "settings.password", UUID.randomUUID().toString().replace("-", "") );
+		password = getString( "settings.password", UUID.randomUUID().toString().replace( "-", "" ) );
 	}
 
-	private static void caching()
-	{
+	private static void caching() {
 
-		if( version < 6 ) {
+		if ( version < 6 ) {
 			Logger.getRootLogger().log( Level.FATAL, "Oudated config, caching is not configured!" );
-			set( "settings.cache.cachedir", "data/cache");
-			set( "settings.cache.expiretime", 10);
+			set( "settings.cache.cachedir", "data/cache" );
+			set( "settings.cache.expiretime", 10 );
 		}
 
-		cacheDir = getFile( "settings.cache.cachedir", "data/cache");
-		cacheTime = TimeUnit.DAYS.toMillis( getLong( "settings.cache.expiretime", 10) );
+		cacheDir = getFile( "settings.cache.cachedir", "data/cache" );
+		cacheTime = TimeUnit.DAYS.toMillis( getLong( "settings.cache.expiretime", 10 ) );
 
 	}
 
-	private static void dataSettings()
-	{
+	private static void dataSettings() {
 
 		if ( version < 2 ) {
 			Logger.getRootLogger().log( Level.FATAL, "Oudated config, dataconfig is not configured!" );

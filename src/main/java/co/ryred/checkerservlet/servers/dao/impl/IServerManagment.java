@@ -8,8 +8,7 @@ import java.util.List;
  * @author Cory Redmond
  *         Created by acech_000 on 18/09/2015.
  */
-public interface IServerManagment
-{
+public interface IServerManagment {
 
 	void insertServer( Server user );
 

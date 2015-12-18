@@ -10,7 +10,7 @@ import lombok.Data;
 @AllArgsConstructor
 public class NameResponse {
 
-    private ID id;
-    private String name;
+	private ID id;
+	private String name;
 
 }

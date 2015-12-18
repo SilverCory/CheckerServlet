@@ -4,8 +4,7 @@ package co.ryred.checkerservlet.util;
  * @author Cory Redmond
  *         Created by acech_000 on 16/10/2015.
  */
-public class Parsing
-{
+public class Parsing {
 
 	public static int parseInt( String string ) {
 
