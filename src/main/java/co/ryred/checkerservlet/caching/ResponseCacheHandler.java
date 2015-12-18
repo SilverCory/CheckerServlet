@@ -5,7 +5,6 @@ import co.ryred.checkerservlet.CheckerServletConfig;
 import co.ryred.checkerservlet.spigot.NameResponse;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 
@@ -21,10 +20,10 @@ public class ResponseCacheHandler {
 		File file = getFile( id, resource );
 		if ( !file.exists() ) return null;
 
-		try {
-			ResponseCache resp = CheckerServlet.full_gson.fromJson( new FileReader( file ), ResponseCache.class );
+		try ( FileReader fr = new FileReader( file ) ) {
+			ResponseCache resp = CheckerServlet.full_gson.fromJson( fr, ResponseCache.class );
 			if ( !resp.isExpired() ) return resp.getResponse();
-		} catch ( FileNotFoundException e ) {
+		} catch ( java.io.IOException e ) {
 		}
 
 		return null;
