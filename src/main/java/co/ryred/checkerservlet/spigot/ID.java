@@ -1,4 +1,4 @@
-package co.ryred.checkerservlet.Spigot;
+package co.ryred.checkerservlet.spigot;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
